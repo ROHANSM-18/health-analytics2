@@ -1,6 +1,6 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
-const sequelize = new Sequelize('medicaldb', 'root', 'root', {
+const sequelize = new Sequelize('medicaldb', 'root', 'u$55O8S[@XsP', {
   host: 'localhost',
   dialect: 'mysql',
 });

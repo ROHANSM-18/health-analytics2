@@ -4,19 +4,41 @@ import { useQuery } from '@apollo/client';
 import { GET_PATIENT_BY_USER_ID } from '../graphql/queries/getpatientsbyuserid';
 import {
   AppBar,
-  Button,
-  Drawer,
-  IconButton,
-  List,
-  ListItem,
-  ListItemText,
   Toolbar,
+  Snackbar,
+  Avatar,
   Typography,
-  Snackbar
+  Menu,
+  MenuItem,
+  IconButton,
+  ThemeProvider,
+  createTheme,
+  Button
 } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Outlet, Link } from "react-router-dom";
 import MuiAlert from '@mui/material/Alert';
-import MenuIcon from '@mui/icons-material/Menu';
+import './styles.css'
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#ff5733',
+    },
+  },
+});
+
+function calculateAge(dateOfBirth) {
+  const dob = new Date(dateOfBirth);
+  const today = new Date();
+  const age = today.getFullYear() - dob.getFullYear();
+
+  // Adjust age if the birth date has not occurred this year yet
+  if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+    age--;
+  }
+
+  return age;
+}
 
 const PatientHome = () => {
   const userData = JSON.parse(localStorage.getItem(USER_DATA_KEY));
@@ -30,6 +52,10 @@ const PatientHome = () => {
 
   
   const patient = data.getPatientByUserId;
+  const name = (patient.FirstName)[0]
+  const age = calculateAge(patient.DateOfBirth); 
+  const dateOfBirth = new Date(patient.DateOfBirth);
+  const formattedDateOfBirth = dateOfBirth.toDateString();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -53,68 +79,102 @@ const PatientHome = () => {
     setLogoutSnackbarOpen(false);
   };
 
+  
+  
+
+
   return (
+    <ThemeProvider theme={theme}>
     <div>
-       <h2>Welcome, {patient.FirstName}</h2>
-      <AppBar position="static">
+
+    <AppBar position="static">
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerOpen}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            Health Analytics Platform
-          </Typography>
-          <Button
+
+        <div className='nav-links'>
+        <Link to="/"  className='logo-style'>
+              Health Analytics Platform
+            </Link>
+          <Link to="/vitals" className='nav-link-style' >
+            Vitals 
+          </Link>
+          <Link to="/medical-history" className='nav-link-style'>
+            Medical History
+          </Link>
+          <Link to="/appointments" className='nav-link-style'>
+            Appointments
+          </Link>
+          <Link to="/lab-results" className='nav-link-style'>
+            Lab Results
+          </Link>
+          <Outlet />
+          </div>
+    
+                <div   className='logout-style'>
+                    <Button
+                  
             color="inherit"
             onClick={handleLogout}
             variant="outlined"
-            sx={{ marginRight: 2 }}
+            
           >
-            Logout
+            Log out
           </Button>
-          <Button
-            color="inherit"
-            variant="contained"
-            sx={{
-              backgroundColor: 'white',
-              color: 'black',
-              borderRadius: '50%',
-              width: '40px',
-              height: '40px',
-            }}
-            onClick={handleDrawerOpen}
-          >
-            PD
-          </Button>
+          </div>
+          <div className='user-circle'>
+          <IconButton onClick={handleDrawerOpen}>
+            <Avatar
+              sx={{
+                backgroundColor: ' rgba(250, 235, 215, 0.901)',
+                width: 35,
+                height: 35,
+              }}
+            >
+
+             <p className='user-style'> {name} </p>
+            </Avatar>
+          </IconButton>
+          </div>
         </Toolbar>
-      </AppBar>
-
-      <Drawer anchor="left" open={open} onClose={handleDrawerClose}>
-        <List>
-          <ListItem button component={Link} to="/vitals">
-            <ListItemText primary="Vitals" />
-          </ListItem>
-          <ListItem button component={Link} to="/medical-history">
-            <ListItemText primary="Medical History" />
-          </ListItem>
-          <ListItem button component={Link} to="/appointments">
-            <ListItemText primary="Appointments" />
-          </ListItem>
-          <ListItem button component={Link} to="/lab-results">
-            <ListItemText primary="Lab Results" />
-          </ListItem>
-        </List>
-      </Drawer>
-
-      <div style={{ marginLeft: '260px' }}>
-      </div>
-
+        </AppBar>
+        <div className='main-content'>
+      <h2>Welcome,<span style={{color:'#ff5733'}}> {patient.FirstName}</span></h2>
+      <table className='info-table'>
+        <tbody>
+          <tr>
+            <td>First Name:</td>
+            <td>{patient.FirstName}</td>
+          </tr>
+          <tr>
+            <td>Last Name:</td>
+            <td>{patient.LastName}</td>
+          </tr>
+          <tr>
+            <td>Date of Birth:</td>
+            <td>{formattedDateOfBirth}</td>
+          </tr>
+          <tr>
+            <td>Gender:</td>
+            <td>{patient.Gender}</td>
+          </tr>
+          <tr>
+            <td>Age:</td>
+            <td>{age} years</td>
+          </tr>
+          <tr>
+            <td>Contact Information:</td>
+            <td>{patient.ContactInformation}</td>
+          </tr>
+          <tr>
+            <td>Doctor:</td>
+            <td>{patient.Doctor && patient.Doctor.FirstName}</td>
+          </tr>
+          <tr>
+            <td>Email:</td>
+            <td>{patient.UserID && patient.UserID.email}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
       <Snackbar
   open={logoutSnackbarOpen}
   autoHideDuration={2000}
@@ -126,6 +186,7 @@ const PatientHome = () => {
 </Snackbar>
 
     </div>
+    </ThemeProvider>
   );
 };
 

@@ -145,7 +145,7 @@ function Login() {
               style={styles.input}
             />
             <Button type="submit" style={styles.button}>
-              Sign In
+              Log In
             </Button>
           </form>
           <div style={styles.errorPopup}>

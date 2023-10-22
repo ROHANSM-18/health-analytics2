@@ -4,10 +4,12 @@ import Login from './components/Login';
 import PatientHome from './components/patientHome';
 import DoctorHome from './components/doctorHome';
 import Home from './components/Home';
+import Vitals from './components/vitals'
 import { ApolloProvider } from '@apollo/client';
 import client from './client';
 //import PatientDashboard from './components/PatientDashboard';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'; 
+
 
 function App() {
   return (
@@ -20,6 +22,7 @@ function App() {
           <Route path='/login' element={<Login/>} />
           <Route path='/doctor-home' element={<DoctorHome/>}/>
           <Route path='/patient-home' element={<PatientHome/>}/>
+          <Route path='/vitals' element={<Vitals/>}/>
           </Routes>
         </div>
       </Router>

@@ -11,9 +11,11 @@ query GetPatientByUserId($getPatientByUserIdId: Int!) {
     ContactInformation
     Doctor {
       DoctorID
+      FirstName
     }
     UserID {
       id
+      email
     }
   }
 }

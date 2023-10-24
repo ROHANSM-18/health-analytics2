@@ -32,6 +32,9 @@ Vital.belongsTo(VisitAppointment, { foreignKey: 'VisitID'});
 Vital.belongsTo(Patient, { foreignKey: 'PatientID'});
 Vital.belongsTo(Doctor, { foreignKey: 'DoctorID'});
 
+User.hasOne(Patient, { foreignKey: 'UserID' });
+User.hasOne(Doctor, { foreignKey: 'UserID' });
+
 module.exports = {
   User,
   Doctor,

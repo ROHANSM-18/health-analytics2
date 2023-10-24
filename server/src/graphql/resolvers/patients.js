@@ -6,8 +6,7 @@ const User = require('../../models/users')
 const getAllPatients = async () => {
   try {
     const patients = await Patient.findAll({
-      include: Doctor, 
-      include: User
+      include: [Doctor, User],
     });
     return patients;
     } catch (error) {

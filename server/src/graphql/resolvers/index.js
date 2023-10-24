@@ -7,6 +7,7 @@ const getVitalsByPatientID = require('./vitals');
 const authResolvers = require('./authresolvers');
 const getPatientByUserId = require('./getpatientdata');
 const getDoctorByUserId = require('./getdoctordata');
+const addDoctorToPatient = require('./addDoctorToPatient')
 
 const resolvers = {
   
@@ -22,6 +23,7 @@ const resolvers = {
   },
   Mutation: {
     ...authResolvers,
+    addDoctorToPatient,
   },
 };
 

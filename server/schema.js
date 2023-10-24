@@ -72,10 +72,24 @@ const typeDefs = gql`
     Doctor: Doctor
   }
 
-  type Mutation {
-    signup(input: SignupInput): User
-    login(input: LoginInput): User
+
+  type User {
+    id: Int
+    email: String
+    role: UserRole
   }
+  
+  enum UserRole {
+    doctor
+    patient
+  }
+
+  enum genderList {
+    F
+    M
+    O
+  }
+    
   
   input SignupInput {
     firstName: String!
@@ -93,23 +107,18 @@ const typeDefs = gql`
     password: String!
   }
   
-  type User {
-    id: Int
-    email: String
-    role: UserRole
+
+  input AddDoctorToPatientInput {
+    DoctorID: String!
+    PatientID: String!
   }
   
-  enum UserRole {
-    doctor
-    patient
+  type Mutation {
+    signup(input: SignupInput): User
+    login(input: LoginInput): User
+    addDoctorToPatient(input: AddDoctorToPatientInput): Patient
   }
 
-  enum genderList {
-    F
-    M
-    O
-  }
-  
   
   type Query {
     getAllPatients: [Patient]
